@@ -3,7 +3,6 @@ export default function Home(){
 <div className=" bg-pink-700 w-[100vw] h-[200vh]">
   <div className="w-full flex">
     <h1 className="pt-5 text-4xl mx-auto">
-      {" "}
       Introduction aux language HTML, CSS et Javascript
     </h1>
   </div>
