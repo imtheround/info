@@ -1,4 +1,22 @@
+"use client"
+import { useState } from "react"
+
 export default function Home(){
+  const [clickedHTML, SetClickedHtml] = useState(false)
+  const [clickedVideo, SetClickedVideo] = useState(false)
+  const DisplayProgramming = () => {
+    if (clickedHTML) {
+      SetClickedHtml(false)
+      
+    } else{
+    SetClickedHtml(true)
+  }}
+  const DisplayVideo = () =>{
+  if (clickedVideo) {
+    SetClickedVideo(false)
+  } else{
+    SetClickedVideo(true)
+  }}
   return(
 <div className=" bg-pink-700 w-[100vw] h-[200vh]">
   <div className="w-full flex">
@@ -11,32 +29,30 @@ export default function Home(){
       <div className="w-[600px] h-[50px] mx-auto mt-6 text-center text-3xl">
         Menu
       </div>
-      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center">
-        <a href="/ressources">
+      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center" >
+        <a href="/acceuil">
           <h1 className="text-[20px] mt-[8px]">Acceuil</h1>
         </a>
       </div>
-      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center">
-        <a href="/ressources">
+      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center"onClick={DisplayProgramming}>
           <h1 className="text-[20px] mt-[8px]">HTML</h1>
-        </a>
       </div>
       <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center">
-        <a href="/ressources">
+        <a href="/css">
           <h1 className="text-[20px] mt-[8px]">CSS</h1>
         </a>
       </div>
-      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center">
-        <a href="/ressources">
+      <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center"onClick={DisplayVideo}>
+
           <h1 className="text-[20px] mt-[8px]">Video</h1>
-        </a>
+
       </div>
       <div className="w-[600px] h-[50px] bg-amber-700 hover:bg-amber-900 border-2 border-black mx-auto mt-6 text-center">
-        <a href="/ressources">
+        <a href="/javascript">
           <h1 className="text-[20px] mt-[8px]">Javascript</h1>
         </a>
       </div>
-    </div>
+    </div>{clickedHTML &&
       <div className="w-[700px] h-[500px] border-2 border-black mt-[10vh] mx-auto grid  font-extrabold bg-amber-200">
         <h1 className="h-[80px] text-4xl mt-4 mx-auto">Programmation HTML</h1>
         <div className="p-3 grid h-full">
@@ -50,11 +66,12 @@ export default function Home(){
             <li>ked</li>
         </ol>
         </div>
-    </div>
-    <iframe className="w-[560px] h-[315] mx-auto mt-[10vh]" src="https://www.youtube.com/embed/pKh5fNuj2-w?si=0FNl1htLPg9X5VV3"></iframe>
+    </div>}
+    {clickedVideo &&
+    <iframe className="w-[560px] h-[315] mx-auto mt-[10vh]" src="https://www.youtube.com/embed/pKh5fNuj2-w?si=0FNl1htLPg9X5VV3"></iframe>}
   </div>
 </div>
-
-
   )
 }
+
+  
