@@ -15,15 +15,16 @@ export default function Home(){
     e.preventDefault();
     if (password === "admin123" && username === "admin"){
     setLoggedin(true)
+    setFailedlogin(false)
     setTimeout(() => {
       router.push("/");
     }, 3000);
 
     } else {
-      alert('try again gg')
+      setFailedlogin(true)
     }
   }
-
+  
   //handle for change (js setting the value to the value in the forme)
   const handleChange = (e:any) => {
     setUsername(e.target.value);
@@ -72,9 +73,11 @@ export default function Home(){
       </div>
       {/* displayed when logged in */}
       {loggedin && <p className="mx-auto text-green-500 text-[20px] pt-5 font-bold">Logged in successfully!! You will be redirected in 3 seconds</p>}
+      {failedLogin && <p className="mx-auto text-red-500 text-[20px] pt-5 font-bold">Wrong username or password! Try again.</p>}
+    </div>
     </div>
     
-  </div>
+
 
  )
 }
