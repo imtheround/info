@@ -204,7 +204,7 @@ export default function Home(){
       </div>
       {/* submit button */}
       <button
-        className="mt-3 mx-auto w-[150px] h-[40px] rounded-[5px] border-[1.5px] border-solid border-white text-white font-bold hover:bg-white hover:text-black hover:border-black duration-300 ease-in-out"
+        className="mt-3 mx-auto w-[150px] h-[40px] rounded-[5px] border-[1.5px] border-solid border-white text-white font-bold hover:bg-white hover:text-black hover:border-black duration-500 ease-in-out"
         onClick={submitCallback}
       >
         Submit
