@@ -21,3 +21,9 @@ npm run dev
 ```
 Open `localhost:3000/formulaire` to see the webpage
 All source code for the formulaire & the page redirected to (/registered) are in `info/app/formulaire/page.tsx` & `info/app/registered.tsx`
+
+--------------------------------------------------------
+Added features:
+```
+- animation on hover (register div) line 116
+- 

@@ -35,35 +35,63 @@ export default function Home(){
   const [passwordspecialChar, setpasswordspecialChar] = useState(true)
   // to check if both pwd is the same
   const [samepwd, Setsamepwd] = useState(false)
+  // to store the reason why the pwd is invalid, used gpt for the <string[]>([])
+  const [failedreason, setfailedreason] = useState<string[]>([]);
+  // the msg displayed when failed to register
+  const [failedstring, setfailedstring] = useState("")
   // callback for the form
   // the e.preventdefault is from gpt cuz i didnt know how to prevent full refresh when submit
   const submitCallback = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordValidated){
+    if (samepwd && !pwdLengthNotMet && passwordValidated && username.length !== 0) {
       // so the logged in success full message appear
     setLoggedin(true)
-    // 3 second timeout
+    // 2 second timeout
     setTimeout(() => {
       // redirect to registered page
       router.push("/registered?name=" + username);
-    }, 3000);
+    }, 2000);
     } else {
-      alert("Invalid password!")
+      if (username.length === 0 && !failedreason.includes("Username is empty")){
+        setfailedreason(prev => [
+          ...prev.filter(item => item !== "Username is empty"),
+          "Username is empty",
+        ]);
+        // because react doesnt update the variable, and the reason will be empty, even tho username is empty, 
+        alert("Invalid password! Reasons: "+failedreason.join(", ")+"Username is empty")
+      } else {
+      const reasonsString = failedreason.join(", ");
+      alert("Invalid password! Reasons:"+reasonsString)}
     }
   }
   
   //handle for change (js setting the value to the value in the forme) this one for username
   const handleChange = (e:any) => {
     setUsername(e.target.value);
+    if (e.target.value.length !== 0){
+      setfailedreason(prev => prev.filter(item => item !== "Username is empty"));
+    } else {
+      setfailedreason(prev => [
+        ...prev.filter(item => item !== "Username is empty"),
+        "Username is empty",
+      ]);
+    }
   }
   // same thing here, for password
   const handleChangePassword = (e:any) => {
+    console.log(failedreason)
     // check if password and enter password again are same
     if (charValidate === e.target.value&& e.target.value.length !== 0){
       // this is used to show the text
       Setsamepwd(true)
       setpasswordValidated(true)
+      setfailedreason(prev => prev.filter(item => item !== "Passwords do not match"));
     } else {
+      // used gpt again for the ...prev filter thingy, and check if the reason already exist
+      setfailedreason(prev => [
+        ...prev.filter(item => item !== "Passwords do not match"),
+        "Passwords do not match",
+      ]);
       Setsamepwd(false)
       setpasswordValidated(false)
     }
@@ -71,7 +99,13 @@ export default function Home(){
     if (e.target.value.length < 8 || e.target.value.length === 0) {
       setPwdLengthNotMet(true);
       setpasswordValidated(false)
+      // gpt here again
+      setfailedreason(prev => [
+    ...prev.filter(item => item !== "Passwords is less then 8 characters"),
+    "Passwords is less then 8 characters",
+  ]);
     } else {
+      setfailedreason(prev => prev.filter(item => item !== "Passwords is less then 8 characters"));
       setPwdLengthNotMet(false);
       setpasswordValidated(true)
     }
@@ -87,17 +121,21 @@ export default function Home(){
   }
   
    const handleChangeValidate = (e: any) => {
-    setCharValidate(e.target.value);
-    // if both are same check
-    if (e.target.value === password && e.target.value.length !== 0) {
-      Setsamepwd(true);
-      setpasswordValidated(true);
-    } else {
-      Setsamepwd(false);
-      setpasswordValidated(false);
-    }
-
-  };
+  setCharValidate(e.target.value);
+  // if both are same check
+  if (e.target.value === password && e.target.value.length !== 0) {
+    Setsamepwd(true);
+    setpasswordValidated(true);
+    setfailedreason(prev => prev.filter(item => item !== "Passwords do not match"));
+  } else {
+    setfailedreason(prev => [
+      ...prev.filter(item => item !== "Passwords do not match"),
+      "Passwords do not match",
+    ]);
+    Setsamepwd(false);
+    setpasswordValidated(false);
+  }
+};
 
   // returns the actual html
   return(
@@ -113,7 +151,7 @@ export default function Home(){
         Register
       </h1>
       {/* register box*/}
-      <div className="mt-3 mx-auto w-[380px] h-[350px] border-[1.5px] border-solid border-white rounded-[5px]  hover:w-[410px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px]">
+      <div className="mt-3 mx-auto w-[380px] h-[350px] border-[1.5px] border-solid border-white rounded-[5px] hover:w-[410px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px] ease-in-out">
         {/* a div here to wrap things up cuz of flex*/}
         <div className="pl-5">
 
@@ -164,10 +202,20 @@ export default function Home(){
         {!passwordspecialChar && <p className="mx-auto text-green-500 text-[15px] pt-1 font-semibold">✅ Password contains a special character</p>}
        </div>
       </div>
+      {/* submit button */}
+      <button
+        className="mt-3 mx-auto w-[150px] h-[40px] rounded-[5px] border-[1.5px] border-solid border-white text-white font-bold hover:bg-white hover:text-black hover:border-black duration-300 ease-in-out"
+        onClick={submitCallback}
+      >
+        Submit
+      </button>
       {/* displayed when regirstered */}
-      {loggedin && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">Registered successfully!! You will be redirected in 3 seconds</p>}
-    
-    </div>
+      {loggedin && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">Registered successfully!! You will be redirected in 2 seconds</p>}
+      
+
+
+
+  </div>
     </div>
     
 
