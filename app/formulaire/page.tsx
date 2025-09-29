@@ -39,6 +39,7 @@ export default function Home(){
   const [failedreason, setfailedreason] = useState<string[]>([]);
   // the msg displayed when failed to register
   const [failedstring, setfailedstring] = useState("")
+  const [failed, setfailed] = useState(false)
   // callback for the form
   // the e.preventdefault is from gpt cuz i didnt know how to prevent full refresh when submit
   const submitCallback = (e: React.FormEvent) => {
@@ -57,11 +58,19 @@ export default function Home(){
           ...prev.filter(item => item !== "Username is empty"),
           "Username is empty",
         ]);
-        // because react doesnt update the variable, and the reason will be empty, even tho username is empty, 
-        alert("Invalid password! Reasons: "+failedreason.join(", ")+"Username is empty")
+        // because react doesnt update the variable, so the reason will be empty, even tho username is empty, thats why "username is empty" has to be hardcoded
+        // setting failed string + display the failed string
+        setfailedstring("Invalid password! Reasons: "+failedreason.join(", ")+"Username is empty")
+        setfailed(true)
       } else {
-      const reasonsString = failedreason.join(", ");
-      alert("Invalid password! Reasons:"+reasonsString)}
+        // same thingy here, but without the username is empty part
+      setfailed(true)
+      setfailedstring("Invalid password! Reasons: "+failedreason.join(", "))
+      }
+      // clear the failed msg after 3 seconds
+      setTimeout(() => {
+        setfailed(false)
+      }, 3000);
     }
   }
   
@@ -69,6 +78,7 @@ export default function Home(){
   const handleChange = (e:any) => {
     setUsername(e.target.value);
     if (e.target.value.length !== 0){
+      // used gpt again for the ...prev filter thingy, and check if the reason already exist
       setfailedreason(prev => prev.filter(item => item !== "Username is empty"));
     } else {
       setfailedreason(prev => [
@@ -87,7 +97,6 @@ export default function Home(){
       setpasswordValidated(true)
       setfailedreason(prev => prev.filter(item => item !== "Passwords do not match"));
     } else {
-      // used gpt again for the ...prev filter thingy, and check if the reason already exist
       setfailedreason(prev => [
         ...prev.filter(item => item !== "Passwords do not match"),
         "Passwords do not match",
@@ -142,7 +151,7 @@ export default function Home(){
    // parent div for everything + background
    // this div for the conic gradient background
   //<div className="bg-conic-180 from-black via-gray-300 to-black w-[100vw] h-[100vh] flex">
-  // this if you want a img as the background, can;t really see the form , so using black for right now
+  // this if you want a another img as the background, can;t really see the form , so using black for right now
   //<div className="bg-[url(/ressources/mountain.jpg)] bg-cover w-[100vw] h-[100vh] flex"> 
   <div className="bg-[url(/ressources/black.png)] w-[100vw] h-[100vh] flex">
    <div className="mt-8 mx-auto h-[300px] grid">
@@ -151,11 +160,11 @@ export default function Home(){
         Register
       </h1>
       {/* register box*/}
-      <div className="mt-3 mx-auto w-[380px] h-[350px] border-[1.5px] border-solid border-white rounded-[5px] hover:w-[410px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px] ease-in-out">
+      <div className="mt-3 mx-auto w-[425px] h-[370px] border-[1.5px] border-solid border-white rounded-[5px] hover:w-[450px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px] ease-in-out">
         {/* a div here to wrap things up cuz of flex*/}
-        <div className="pl-5">
+        <div className="mx-auto my-auto">
 
-        <h1 className="pt-4 text-white ">Username</h1>
+        <h1 className=" text-white">Username</h1>
         {/* form n.1*/}
         <form onSubmit={submitCallback}>
           <input
@@ -171,7 +180,7 @@ export default function Home(){
         {/* form n.2*/}
         <form onSubmit={submitCallback}>
           <input
-            className="hover:border-[2.5px] mt-2 w-[250px] h-[30px] rounded-[5px] border-[1px] border-solid border-white text-white text-center mx-auto"
+            className="hover:border-[2.5px] mt-2 w-[280px] h-[30px] rounded-[5px] border-[1px] border-solid border-white text-white text-center mx-auto"
             type="password"
             id="passwordinput"
             value={password}
@@ -183,7 +192,7 @@ export default function Home(){
         {/* form n.3*/}
         <form onSubmit={submitCallback}>
           <input
-            className="hover:border-[2.5px] mt-2 w-[250px] h-[30px] rounded-[5px] border-[1px] border-solid border-white text-white text-center mx-auto"
+            className="hover:border-[2.5px] mt-2 w-[280px] h-[30px] rounded-[5px] border-[1px] border-solid border-white text-white text-center mx-auto"
             type="password"
             id="passwordinput"
             value={charValidate}
@@ -195,7 +204,7 @@ export default function Home(){
         {!samepwd && <p className="mx-auto text-red-500 text-[15px] pt-5 font-semibold">❌ Password has to be the same</p>}
         {samepwd && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">✅ Password is the same</p>}
         {/* to display if pwd length is met or not */}
-        {pwdLengthNotMet && <p className="mx-auto text-red-500 text-[15px] pt-1 font-semibold">❌ Password has to be longer then 8 characters</p>}
+        {pwdLengthNotMet && <p className="mx-auto text-red-500 text-[15px] pt-1 font-semibold">❌ Password has to be &gt; 8 characters</p>}
         {!pwdLengthNotMet && <p className="mx-auto text-green-500 text-[15px] pt-1 font-semibold">✅ Password is longer then 8 characters</p>}
         {/* to display if theres special chars in the pwd */}
         {passwordspecialChar && <p className="mx-auto text-yellow-500 text-[15px] pt-1 font-semibold">⚠️ No special character in the password</p>}
@@ -210,15 +219,11 @@ export default function Home(){
         Submit
       </button>
       {/* displayed when regirstered */}
-      {loggedin && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">Registered successfully!! You will be redirected in 2 seconds</p>}
-      
-
-
+      {loggedin && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">Registered successfully!! You will be redirected in 2 seconds.</p>}
+      {/* displayed when failed */}
+      {failed && <p className="mx-auto text-red-500 text-[15px] pt-5 font-semibold">{failedstring}</p>}
 
   </div>
     </div>
-    
-
-
  )
 }
