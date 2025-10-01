@@ -3,6 +3,16 @@ Im using tailwind css for styling, https://tailwindcss.com/ so the css is direct
 if you want to see the css code (like .bg-black {background-color: var(--color-black)}, install tailwind extension in vscode and hover over the classname
 
 because you cant really see the form well with a img, im using a img thats almost entirely black, for other img, refer to line 108 where i put a mountain img
+
+where i used gpt:
+- to prevent full refresh when submiting the form line 51
+- to add/remove items from the reason array (line 62-66)
+
+other resources used:
+stackoverflow 
+tailwind docs
+nextjs docs
+react docs
 */
 
 // use client so this will be rendered on client side
@@ -29,16 +39,17 @@ export default function Home(){
   const [charValidate, setCharValidate] = useState("")
   // here is the length isnt met
   const [pwdLengthNotMet, setPwdLengthNotMet] = useState(true)
-  // to prevent submission if the pwd isnt validat
+  // to prevent submission if the pwd isnt validated
   const [passwordValidated, setpasswordValidated] = useState(false)
   // to check if theres a special char
   const [passwordspecialChar, setpasswordspecialChar] = useState(true)
   // to check if both pwd is the same
   const [samepwd, Setsamepwd] = useState(false)
-  // to store the reason why the pwd is invalid, used gpt for the <string[]>([])
-  const [failedreason, setfailedreason] = useState<string[]>([]);
+  // to store the reason why the pwd is invalid, used gpt for the <string[]>([]), starting with 2 reasons because if theres no changes in the fields, the reason will be empty
+  const [failedreason, setfailedreason] = useState<string[]>(["Passwords do not match", "Passwords is less then 8 characters"]);
   // the msg displayed when failed to register
   const [failedstring, setfailedstring] = useState("")
+  // to show the failed msg
   const [failed, setfailed] = useState(false)
   // callback for the form
   // the e.preventdefault is from gpt cuz i didnt know how to prevent full refresh when submit
@@ -92,11 +103,13 @@ export default function Home(){
     console.log(failedreason)
     // check if password and enter password again are same
     if (charValidate === e.target.value&& e.target.value.length !== 0){
-      // this is used to show the text
+      // this is used to show the text + mark the pwd as validated
       Setsamepwd(true)
       setpasswordValidated(true)
+      // take "Passwords do not match" out of the reason
       setfailedreason(prev => prev.filter(item => item !== "Passwords do not match"));
     } else {
+      // add "Passwords do not match" to the reason
       setfailedreason(prev => [
         ...prev.filter(item => item !== "Passwords do not match"),
         "Passwords do not match",
@@ -108,7 +121,6 @@ export default function Home(){
     if (e.target.value.length < 8 || e.target.value.length === 0) {
       setPwdLengthNotMet(true);
       setpasswordValidated(false)
-      // gpt here again
       setfailedreason(prev => [
     ...prev.filter(item => item !== "Passwords is less then 8 characters"),
     "Passwords is less then 8 characters",
@@ -160,15 +172,15 @@ export default function Home(){
         Register
       </h1>
       {/* register box*/}
-      <div className="mt-3 mx-auto w-[425px] h-[370px] border-[1.5px] border-solid border-white rounded-[5px] hover:w-[450px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px] ease-in-out">
+      <div className="mt-3 mx-auto w-[425px] h-[370px] border-[1.5px] border-solid border-white rounded-[5px] hover:w-[450px] duration-500 flex hover:backdrop-blur-[25px] backdrop-blur-[5px] ease-out ">
         {/* a div here to wrap things up cuz of flex*/}
         <div className="mx-auto my-auto">
-
+        {/* title */}
         <h1 className=" text-white">Username</h1>
         {/* form n.1*/}
         <form onSubmit={submitCallback}>
           <input
-            className="mt-2 w-[250px] h-[30px] rounded-[5px] border-[1px] hover:border-[2.5px] border-solid border-white text-white text-center mx-auto"
+            className="mt-2 w-[280px] h-[30px] rounded-[5px] border-[1px] hover:border-[2.5px] border-solid border-white text-white text-center mx-auto"
             type="text"
             id="myInput"
             value={username}
@@ -203,7 +215,7 @@ export default function Home(){
         {/* to display if both pwd is the same or not */}
         {!samepwd && <p className="mx-auto text-red-500 text-[15px] pt-5 font-semibold">❌ Password has to be the same</p>}
         {samepwd && <p className="mx-auto text-green-500 text-[15px] pt-5 font-semibold">✅ Password is the same</p>}
-        {/* to display if pwd length is met or not */}
+        {/* to display if pwd length is met or not, using &gt; for > */}
         {pwdLengthNotMet && <p className="mx-auto text-red-500 text-[15px] pt-1 font-semibold">❌ Password has to be &gt; 8 characters</p>}
         {!pwdLengthNotMet && <p className="mx-auto text-green-500 text-[15px] pt-1 font-semibold">✅ Password is longer then 8 characters</p>}
         {/* to display if theres special chars in the pwd */}
@@ -214,8 +226,7 @@ export default function Home(){
       {/* submit button */}
       <button
         className="mt-3 mx-auto w-[150px] h-[40px] rounded-[5px] border-[1.5px] border-solid border-white text-white font-bold hover:bg-white hover:text-black hover:border-black duration-500 ease-in-out"
-        onClick={submitCallback}
-      >
+        onClick={submitCallback}>
         Submit
       </button>
       {/* displayed when regirstered */}
