@@ -4,6 +4,8 @@ if you want to see the css code (like .bg-black {background-color: var(--color-b
 
 because you cant really see the form well with a img, im using a img thats almost entirely black, for other img, refer to line 108 where i put a mountain img
 
+some varaibles arent really named properly, refer to the comments for their actual functionality
+
 where i used gpt:
 - to prevent full refresh when submiting the form line 51
 - to add/remove items from the reason array (line 62-66)
@@ -71,7 +73,12 @@ export default function Home(){
         ]);
         // because react doesnt update the variable, so the reason will be empty, even tho username is empty, thats why "username is empty" has to be hardcoded
         // setting failed string + display the failed string
+        if (failedreason.length === 0){
+          // this is if the only reason is username is empty
+          setfailedstring("Invalid password! Reasons: Username is empty")
+        } else {
         setfailedstring("Invalid password! Reasons: "+failedreason.join(", ")+"Username is empty")
+      }
         setfailed(true)
       } else {
         // same thingy here, but without the username is empty part
