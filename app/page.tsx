@@ -1,29 +1,3 @@
-/* 
-all the code until return is the typescript used to validate password, handle form and redirect, the html and css is from line 170
-Im using tailwind css for styling, https://tailwindcss.com/ so the css is directly in the html, eg: className="bg-black" = background black or text-white = white text
-if you want to see the css code (like .bg-black {background-color: var(--color-black)}, install tailwind extension in vscode and hover over the classname
-
-because you cant really see the form well with a img, im using a img thats almost entirely black, for other img, refer to line 187 where i put a mountain img
-
-some varaibles arent really named properly, refer to the comments for their actual functionality
-
-I used prettier for code format
-
-where i used gpt:
-- to prevent full refresh when submiting the form line 
-- to add/remove items from the reason array 
-
-other resources used:
-stackoverflow 
-tailwind docs
-nextjs docs
-react docs
-
-
-The easter egg:
-when username is set as bounce, and the form is submitted, the form will start bouncing
-submit the form again with the username anything else then bounce to stop it from bouncing
-*/
 
 'use client';
 

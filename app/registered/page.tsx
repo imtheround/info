@@ -1,14 +1,12 @@
-'use client';
-import { useSearchParams } from "next/navigation";
-export default function Registered(){
-    // to get the name from the url
-  const searchParams = useSearchParams();
-  const name = searchParams.get("name");
-  return(
-    <div className="bg-black w-[100vw] h-[100vh] flex">
-        <h1 className="text-white text-[30px] mx-auto font-bold  my-auto">
-          Hi {name}. You are now registered!
-        </h1>
-    </div>
+// had to wrap this in suspense https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+import { Suspense } from 'react'
+import Registered from './Registered' 
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading…</div>}>
+        {/* the text is in <Registered /> */}
+      <Registered />
+    </Suspense>
   )
 }
