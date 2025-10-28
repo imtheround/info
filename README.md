@@ -37,11 +37,13 @@ Open `localhost:3000` to see the webpage (after installing the requirements & ra
 
 The source code is in app/page.tsx and app/registered/*, the global.css is automatically generated, layout.tsx contains the basic settings of the site (description, page name)
 
-all the code until the return function (line 162) is the typescript used to validate password, handle form and redirect, the html and css is from line 162
-Im using tailwind css for styling, https://tailwindcss.com/ so the css is directly in the html, eg: className="bg-black" = background black or text-white = white text
-if you want to see the css code (like .bg-black {background-color: var(--color-black)}), install tailwind extension in vscode and hover over the classname
+All the code until the return function (line 162) is the typescript used to validate password, handle form and redirect, the html and css is from line 162
 
-some varaibles arent really named properly, refer to the comments for their actual functionality
+Im using tailwind css for styling, https://tailwindcss.com/ so the css is directly in the html, eg: className="bg-black" = background black or text-white = white text
+
+If you want to see the css code (like .bg-black {background-color: var(--color-black)}), install tailwind extension in vscode and hover over the classname
+
+Some varaibles arent really named properly, refer to the comments for their actual functionality
 
 I used prettier for code format https://prettier.io/
 
