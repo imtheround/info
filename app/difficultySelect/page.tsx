@@ -1,4 +1,5 @@
 
+// difficulty chooser page
 export default function Page() {
   return (
     <div className='bg-black flex'>
