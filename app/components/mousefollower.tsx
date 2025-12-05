@@ -1,24 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function MouseFollower({ lives }: { lives: number }) {
+  // initial positions
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [followerPosition, setFollowerPosition] = useState({ x: 0, y: 0 });
-  const animationFrameRef = useRef<number | undefined>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   if (lives < 0) lives = 0;
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      // sets the mouse position to the var
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
-
+    // listening to mouse move
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []); // Empty dependency array ensures the effect runs only once
+  }, []); 
 
   useEffect(() => {
     const animate = () => {
+      // so it doesnt just snap to the cursor, instead follows it smoothly
       setFollowerPosition((prev) => ({
         x: prev.x + (mousePosition.x - prev.x) * 0.05,
         y: prev.y + (mousePosition.y - prev.y) * 0.05,
@@ -36,6 +39,7 @@ function MouseFollower({ lives }: { lives: number }) {
   }, [mousePosition]); 
 
   return (
+    // returns the actual div
     <div
       style={{
         position: 'fixed',

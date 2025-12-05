@@ -6,7 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 // imports the heart count that follows the mouse
 import MouseFollower from "../components/mousefollower";
 import useSound from 'use-sound';
-export default function Page() {
+import dynamic from 'next/dynamic';
+
+// Dynamically import the game component to prevent server-side rendering
+// written by ai to prvent some build error
+const GameContent = dynamic(() => Promise.resolve(GamePageContent), { ssr: false });
+
+function GamePageContent() {
   const winSound = new Audio("/ressources/audio/win.mp3");
   const hurtSound = new Audio("/ressources/audio/hurt.mp3");
   const WarningSound = new Audio("/ressources/audio/warning.mp3");
@@ -88,7 +94,7 @@ export default function Page() {
       setMessage("Set a valid number!");
       return;
     }
-
+    
     if (parsed === number) {
       winSound.play();
       setGuessed(true);
@@ -216,4 +222,8 @@ export default function Page() {
     )}
     </div>
   );
+}
+
+export default function Page() {
+  return <GameContent />;
 }
