@@ -1,5 +1,5 @@
 {
-  "main": ".open-next/worker.js",
+  "main": ".open-next/worker/index.mjs",
   "name": "info",
   "compatibility_date": "2025-03-25",
   "compatibility_flags": [
