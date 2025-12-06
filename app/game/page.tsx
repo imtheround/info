@@ -46,7 +46,10 @@ function GamePageContent() {
   const [maxRandomNumber, setMaxRandomNumber] = useState<number>(100);
   // if the player failed or not
   const [ded, setded] = useState<boolean>(false);
-  const [tried, settried] = useState<number>(0);
+  // number of tries
+  const [tried, settried] = useState<number>(1);
+  // red flash effect state
+  const [showRedFlash, setShowRedFlash] = useState<boolean>(false);
   
   // generates a random number https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
   const getRandomInteger = (): number => {
@@ -61,8 +64,7 @@ function GamePageContent() {
   // when the input changes
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
-    setNumberGuess(v);
-    console.log(v); 
+    setNumberGuess(v); 
   };
   // reloads the page
   const button2submitCallback = () => {
@@ -100,26 +102,31 @@ function GamePageContent() {
       setGuessed(true);
       return;
     }
+    // trigger red flash on wrong guess
+    setShowRedFlash(true);
+    setTimeout(() => setShowRedFlash(false), 100);
     settried(tried + 1);
     const newLife = life - 1;
     setLife(newLife);
-    
+    // warning sound when 1 life
     if (newLife === 1) {
       WarningSound.play();
     } else {
       hurtSound.play();
     }
+    // displays the message
     if (parsed < number) {
       setMessage("Guess is smaller than the number!");
     } else {
       setMessage("Guess is bigger than the number!");
     }
+    // flag as dead
     if (newLife <= 0) {
       deadSound.play();
       setded(true)
     }
   };
-
+  // sets life and max number based on difficulty, ran on page load
   useEffect(() => {
     if (diff === "easy") {
       setLife(12);
@@ -134,17 +141,22 @@ function GamePageContent() {
       setLife(5);
       setMaxRandomNumber(85);
     }
-  }, [diff]);
-
+  }, [diff]); 
+  // generates number on page load 
   useEffect(() => {
     generateNumber();
-  }, []);
-
+    console.log("Generated "+number);
+  }, [maxRandomNumber]);
+  // the actual "html"
   return (
     <div className="h-[100vh] w-[100vw] bg-cover bg-center bg-[url('/ressources/numberthing/bg.jpg')]  overflow-hidden">
+      {/* Red flash effect when player gets ut wrong */}
+      {showRedFlash && (
+        <div className="absolute w-[100vw] h-[100vh] bg-red-600 opacity-50 z-50 top-0"></div>
+      )}
       <MouseFollower lives={life} />
       {/* Main box */}
-      <div className="mx-auto my-auto border-4 border-white rounded-[15px] w-[50vw] min-w-[400px] h-[35vw] min-h-[400px] bg-cover bg-center bg-[url('/ressources/numberthing/grass.png')] mt-[20vh] flex">
+      <div className="mx-auto my-auto border-4 border-white rounded-[15px] w-[50vw] min-w-[400px] h-[35vw] min-h-[400px] bg-cover bg-center bg-[url('/ressources/numberthing/grass.png')] mt-[20vh] flex z-10 relative">
         <div className="mx-auto my-auto text-center">
           <p className="font-extrabold text-2xl text-white">
             Guess the number between 1 and {maxRandomNumber}
@@ -168,14 +180,15 @@ function GamePageContent() {
           >
             Submit
           </button>
-
+          {/* displays the smaller or bigger */}
           {!guessed && (
-            <p className="font-bold text-[20px] mt-[20px] text-black">
+            <p className="font-bold text-[20px] mt-[20px] text-black z-10 relative">
               {message}
             </p>
           )}
         </div>
       </div>
+      {/* When game ends and player didnt get the number*/}
       {ded &&(
       <div className="absolute w-[100vw] h-[100vh] bg-black flex z-100 top-0">
         <div className="mx-auto my-auto grid">
@@ -198,11 +211,12 @@ function GamePageContent() {
         </div>
       </div>
     )}
+    {/* When player gets it right */}
     {guessed &&(
       <div className="absolute w-[100vw] h-[100vh] bg-black flex z-100 top-0">
         <div className="mx-auto my-auto grid">
           <p className="text-7xl font-extrabold text-green-600">You Guessed It!</p>
-          <p className="font-bold text-white pt-5">
+          <p className="font-semibold text-white pt-5">
             Congrats! You guessed the number {number} in {tried} tries!
           </p>
           <button
@@ -220,10 +234,14 @@ function GamePageContent() {
         </div>
       </div>
     )}
+    {/* anwser */}
+  <div className="absolute  top-2 right-8 h-[30px] w-[100px] text-[23px] hover:right-[150px] duration-500 text-white font-bold flex z-[1000000]"> 
+      Anwser <p className="block hover:flex pl-10">{number}</p>  
+    </div>
     </div>
   );
 }
-
+{/* returns the entire page */}
 export default function Page() {
   return <GameContent />;
 }

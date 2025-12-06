@@ -51,11 +51,11 @@ function MouseFollower({ lives }: { lives: number }) {
         transform: 'translate(-50%, -50%)',
         display: 'flex',
         alignItems: 'center',
-        zIndex: 100000000
+        zIndex: 100
       }}
     >
       <div
-        className="bg-[url('/ressources/numberthing/burgy.png')] bg-contain bg-no-repeat h-[67px] w-[67px] z-[100000000000000000]"
+        className="bg-[url('/ressources/numberthing/burgy.png')] bg-contain bg-no-repeat h-[67px] w-[67px]"
       />
       <span className="text-white font-bold text-xl">x{lives}</span>
     </div>
