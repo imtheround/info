@@ -57,6 +57,7 @@ function MouseFollower({ lives }: { lives: number }) {
       <div
         className="bg-[url('/ressources/numberthing/burgy.png')] bg-contain bg-no-repeat h-[67px] w-[67px]"
       />
+      
       <span className="text-white font-bold text-xl">x{lives}</span>
     </div>
   );

@@ -234,9 +234,9 @@ function GamePageContent() {
         </div>
       </div>
     )}
-    {/* anwser */}
+    {/* answer */}
   <div className="absolute  top-2 right-8 h-[30px] w-[100px] text-[23px] hover:right-[150px] duration-500 text-white font-bold flex z-[1000000]"> 
-      Anwser <p className="block hover:flex pl-10">{number}</p>  
+      Answer <p className="block hover:flex pl-10">{number}</p>  
     </div>
     </div>
   );
