@@ -96,7 +96,7 @@ function GamePageContent() {
       setMessage("Set a valid number!");
       return;
     }
-    
+    // if the guess is correct
     if (parsed === number) {
       winSound.play();
       setGuessed(true);
